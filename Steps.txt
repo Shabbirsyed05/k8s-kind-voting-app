@@ -86,5 +86,16 @@ Grafana => added datasources and dashboards
 3 dots -> Administrator -> Users and Access-> Users -> newuser 
 role => viewer, editor, admin
 
+3 dots -> connections -> Datasources -> prometheus (build a dashborad) -> Add visualization
+select datasource -> prometheus	=>
+metrix (container_cpu_cfs ) , label filters (namespace) , kube-system -> run query -> apply => add
+metric (container_network-receive) , label filters (namespace) , monitoring -> run query
+suggestion (top right)-> select any dashboard
+
+grafan dashborads (google) => search (kubernetes) -> copy id
+
+Grafana webpage => Dashboards -> New -> import -> paste the ID -> Load -> select prometheus from dropdown -> import
+
+
 
 
