@@ -1,0 +1,90 @@
+Observability : t2.medium  -> ssh , http, https 
+storage : 15
+
+observability (Monitoring(cpu metrics) , logging (error logs) , tracing (how do u trace the logs) , Alerting (cpu > 80 . then should get alert and get mail)) (prometheus)
+Grafana (Promethues things + visualize by dashboards)
+
+sudo apt-get update
+sudo apt-get install docker .io
+docker ps
+sudo usermod -aG dokcer $USER && newgrp docker
+git clone giturl
+cd k8s-kind-voting-app
+cd kind-cluster/
+cat config.yml
+chmod +x install_kind.sh
+./install_kind.sh
+
+Commands here (https://github.com/Shabbirsyed05/k8s-kind-voting-app/blob/main/kind-cluster/commands.md)
+kind create cluster --config=config.yml --name=my-cluster
+
+ArgoCD -> will take code (ex: manifest file) from github and deploy on kubernetes in a automated way, when u use gitops u dont need to create cicd pipelines
+
+chmod +x install_kubectl.sh
+./install_kubectl.sh
+kubectl get nodes
+
+cd ..
+cd k8s-specifications
+kubectl apply -f .
+kubectl get all
+
+Promethues (Time Series Database TSDB) (it will do scraping and quering from the kubernetes or servers)
+
+Helm (package manager for kubernetes manifests files where u can manange, install , delete, uninstall alot of repositories or any applications that is need to be deployed on kubernetes)
+
+For Installing Helm
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+helm
+what is helm charts ?
+
+Installing Prometheus & Grafana :
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add stable https://charts.helm.sh/stable
+helm repo update
+kubectl create namespace monitoring
+helm install kind-prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --set prometheus.service.nodePort=30000 --set prometheus.service.type=NodePort --set grafana.service.nodePort=31000 --set grafana.service.type=NodePort --set alertmanager.service.nodePort=32000 --set alertmanager.service.type=NodePort --set prometheus-node-exporter.service.nodePort=32001 --set prometheus-node-exporter.service.type=NodePort
+kubectl get svc -n monitoring
+kubectl get namespace
+kubectl get nodes -n monitoring
+
+nodeexporter (will be giving the data from the nodes to the prometheus)
+
+kubectl port-forward svc/kind-prometheus-kube-prome-prometheus -n monitoring 9090:9090 --address=0.0.0.0 &
+kubectl port-forward svc/kind-prometheus-grafana -n monitoring 3000:80 --address=0.0.0.0 &
+
+security groups (add port 9090 and 3000)
+
+ip:9090
+
+Promethues webpage -> status -> targets
+
+Prmoethues Queries:
+sum (rate (container_cpu_usage_seconds_total{namespace="default"}[1m])) / sum (machine_cpu_cores) * 100
+
+sum (container_memory_usage_bytes{namespace="default"}) by (pod)
+
+
+sum(rate(container_network_receive_bytes_total{namespace="default"}[5m])) by (pod)
+sum(rate(container_network_transmit_bytes_total{namespace="default"}[5m])) by (pod)
+
+kubectl get svc
+kubectl port-forward svc/vote  5000:5000 --address=0.0.0.0 & (for running the app)
+security groups (add port 5000)
+ip:5000 (app will be opened. trigger some traffic. check cpu by 1st query)
+
+ip:3000 (Grafana webpage)
+admin, prom-operator
+
+Grafana => added datasources and dashboards
+
+3 dots -> Administrator -> Users and Access-> Users -> newuser 
+role => viewer, editor, admin
+
+
+
